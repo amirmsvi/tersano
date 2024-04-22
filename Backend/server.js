@@ -93,7 +93,7 @@ app.post('/signup', function (req, res) { return __awaiter(_this, void 0, void 0
 }); });
 // Login route with detailed error handling
 app.post('/login', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var _a, username, password, user, token, error_2;
+    var _a, username, password, user, passwordMatch, token, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -103,6 +103,7 @@ app.post('/login', function (req, res) { return __awaiter(_this, void 0, void 0,
                 }
                 user = users.find(function (u) { return u.username === username; });
                 if (!user) {
+                    console.warn("Login attempt with unknown username: ".concat(username)); // Log invalid username
                     return [2 /*return*/, res.status(404).json({ error: 'User not found' })];
                 }
                 _b.label = 1;
@@ -110,19 +111,21 @@ app.post('/login', function (req, res) { return __awaiter(_this, void 0, void 0,
                 _b.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, bcrypt.compare(password, user.password)];
             case 2:
-                if (_b.sent()) {
-                    token = jwt.sign({ username: user.username }, JWT_SECRET);
-                    res.json({ token: token });
+                passwordMatch = _b.sent();
+                if (passwordMatch) {
+                    token = jwt.sign({ username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+                    console.info("User ".concat(username, " logged in successfully")); // Log successful login
+                    return [2 /*return*/, res.json({ token: token })];
                 }
                 else {
-                    res.status(401).json({ error: 'Invalid password' });
+                    console.warn("Invalid password attempt for user: ".concat(username)); // Log invalid password
+                    return [2 /*return*/, res.status(401).json({ error: 'Invalid password' })];
                 }
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _b.sent();
-                console.error('Error logging in:', error_2);
-                res.status(500).json({ error: 'An error occurred during login' });
-                return [3 /*break*/, 4];
+                console.error('Error logging in:', error_2); // Log backend error
+                return [2 /*return*/, res.status(500).json({ error: 'An error occurred during login' })];
             case 4: return [2 /*return*/];
         }
     });

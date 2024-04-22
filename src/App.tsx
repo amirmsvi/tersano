@@ -4,12 +4,24 @@ import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import DashboardPage from './components/DashboardPage'; // If you have a dashboard component
 import './App.css';
+import { jwtDecode } from 'jwt-decode';
 
 const App: React.FC = () => {
+
   const isUserLoggedIn = () => {
-    // Example: Check if a JWT token exists in localStorage to determine if user is logged in
     const token = localStorage.getItem('token');
-    return !!token; // Convert to boolean
+  
+    if (!token) {
+      return false; // No token found
+    }
+  
+    try {
+      const decoded = jwtDecode(token); // Decode the JWT
+      const currentTime = Date.now() / 1000; // Get the current time in seconds
+      return decoded.exp !== undefined && decoded.exp > currentTime; // Check if the token is expired
+    } catch (error) {
+      return false; // If there's an error (e.g., invalid token), treat it as not logged in
+    }
   };
 
   return (

@@ -4,7 +4,7 @@ import { Navigate, NavLink } from  "react-router-dom";
 function SideBar() {
     const handleLogout = () => {
         localStorage.removeItem('token'); // Clear authentication token
-        <Navigate to='/login' />; // Redirect to login page
+        <Navigate to='/' />; // Redirect to login page
       };
 
   return (

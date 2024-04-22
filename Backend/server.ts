@@ -70,21 +70,27 @@ app.post('/login', async (req, res) => {
 
   const user = users.find((u: User) => u.username === username);
   if (!user) {
+    console.warn(`Login attempt with unknown username: ${username}`); // Log invalid username
     return res.status(404).json({ error: 'User not found' });
   }
 
   try {
-    if (await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign({ username: user.username }, JWT_SECRET);
-      res.json({ token });
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (passwordMatch) {
+      const token = jwt.sign({ username: user.username }, JWT_SECRET, { expiresIn: '1h' }); // Optional token expiration
+      console.info(`User ${username} logged in successfully`); // Log successful login
+      return res.json({ token });
     } else {
-      res.status(401).json({ error: 'Invalid password' });
+      console.warn(`Invalid password attempt for user: ${username}`); // Log invalid password
+      return res.status(401).json({ error: 'Invalid password' });
     }
   } catch (error) {
-    console.error('Error logging in:', error);
-    res.status(500).json({ error: 'An error occurred during login' });
+    console.error('Error logging in:', error); // Log backend error
+    return res.status(500).json({ error: 'An error occurred during login' });
   }
 });
+
 
 // Protected route with authentication
 app.get('/protected', authenticateToken, (req, res) => {

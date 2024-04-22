@@ -14,10 +14,12 @@ const LoginPage: React.FC = () => {
     setIsLoading(true); // Start loading
     try {
       const response = await axios.post('/login', { username, password });
-      const { token } = response.data;
-      localStorage.setItem('token', token);
-      setErrorMessage(''); // Clear error messages
-      navigate('/dashboard');
+      if (response.status === 200) {
+        localStorage.setItem('token', response.data.token); // Store token in local storage
+        setErrorMessage(''); // Clear error messages
+        navigate('/dashboard');
+      }
+
     } catch (error) {
       console.error('Login failed:', error);
       setErrorMessage('Invalid username or password'); // User-friendly error message
