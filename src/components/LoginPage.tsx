@@ -5,17 +5,24 @@ import axios from 'axios';
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    setIsLoading(true); // Start loading
     try {
       const response = await axios.post('/login', { username, password });
       const { token } = response.data;
       localStorage.setItem('token', token);
+      setErrorMessage(''); // Clear error messages
       navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
+      setErrorMessage('Invalid username or password'); // User-friendly error message
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -27,13 +34,15 @@ const LoginPage: React.FC = () => {
             Sign in to your account
           </h2>
         </div>
+        {errorMessage && (
+          <div className="text-red-500 text-center">
+            {errorMessage}
+          </div>
+        )}
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-          <input type="hidden" name="remember" value="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="username" className="sr-only">
-                Username
-              </label>
+              <label htmlFor="username" className="sr-only">Username</label>
               <input
                 id="username"
                 name="username"
@@ -46,9 +55,7 @@ const LoginPage: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
+              <label htmlFor="password" className="sr-only">Password</label>
               <input
                 id="password"
                 name="password"
@@ -65,9 +72,12 @@ const LoginPage: React.FC = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isLoading} // Disable during loading
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                isLoading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
-              Sign in
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
           <div className="text-center">

@@ -12,6 +12,8 @@ const JWT_SECRET = 'your_secret_key';
 interface User {
   username: string;
   password: string;
+  firstName: string;
+  lastName: string;
 }
 
 // Dummy user database
@@ -29,12 +31,14 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+
 // Signup route with unique username check and error handling
 app.post('/signup', async (req, res) => {
-  const { username, password } = req.body;
+  const { firstName, lastName, username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Username and password are required' });
+  // Validate that all fields are provided
+  if (!firstName || !lastName || !username || !password) {
+    return res.status(400).json({ error: 'All fields are required' });
   }
 
   const existingUser = users.find((u) => u.username === username);
@@ -43,15 +47,17 @@ app.post('/signup', async (req, res) => {
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user: User = { username, password: hashedPassword };
-    users.push(user);
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+    const user: User = { firstName, lastName, username, password: hashedPassword };
+    users.push(user); // Add user to the dummy database
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
-    console.error('Error signing up:', error);
+    console.error('Error signing up:', error); // Log the error
     res.status(500).json({ error: 'An error occurred during signup' });
   }
 });
+
+
 
 // Login route with detailed error handling
 app.post('/login', async (req, res) => {
@@ -84,5 +90,5 @@ app.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: 'Access granted', user: req.user });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

@@ -58,13 +58,14 @@ var authenticateToken = function (req, res, next) {
 };
 // Signup route with unique username check and error handling
 app.post('/signup', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var _a, username, password, existingUser, hashedPassword, user, error_1;
+    var _a, firstName, lastName, username, password, existingUser, hashedPassword, user, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = req.body, username = _a.username, password = _a.password;
-                if (!username || !password) {
-                    return [2 /*return*/, res.status(400).json({ error: 'Username and password are required' })];
+                _a = req.body, firstName = _a.firstName, lastName = _a.lastName, username = _a.username, password = _a.password;
+                // Validate that all fields are provided
+                if (!firstName || !lastName || !username || !password) {
+                    return [2 /*return*/, res.status(400).json({ error: 'All fields are required' })];
                 }
                 existingUser = users.find(function (u) { return u.username === username; });
                 if (existingUser) {
@@ -76,13 +77,13 @@ app.post('/signup', function (req, res) { return __awaiter(_this, void 0, void 0
                 return [4 /*yield*/, bcrypt.hash(password, 10)];
             case 2:
                 hashedPassword = _b.sent();
-                user = { username: username, password: hashedPassword };
-                users.push(user);
+                user = { firstName: firstName, lastName: lastName, username: username, password: hashedPassword };
+                users.push(user); // Add user to the dummy database
                 res.status(201).json({ message: 'User created successfully' });
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _b.sent();
-                console.error('Error signing up:', error_1);
+                console.error('Error signing up:', error_1); // Log the error
                 res.status(500).json({ error: 'An error occurred during signup' });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -129,5 +130,5 @@ app.post('/login', function (req, res) { return __awaiter(_this, void 0, void 0,
 app.get('/protected', authenticateToken, function (req, res) {
     res.json({ message: 'Access granted', user: req.user });
 });
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 3001;
 app.listen(PORT, function () { return console.log("Server is running on port ".concat(PORT)); });
