@@ -8,12 +8,14 @@ const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://tersano-backend.vercel.app';
+
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true); // Start loading
     try {
-      const response = await axios.post('/login', { username, password });
+      const response = await axios.post(`${backendUrl}/login`, { username, password });
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token); // Store token in local storage
         setErrorMessage(''); // Clear error messages

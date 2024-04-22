@@ -30,7 +30,8 @@ const handleProductAdded = (newProduct: Product) => {
 useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/products'); // Fetch product data
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://tersano-backend.vercel.app';
+        const response = await axios.get(`${backendUrl}/products`); // Fetch product data
         setProducts(response.data); // Set the product list
         setLoading(false); // Update loading status
       } catch (error) {
@@ -66,9 +67,9 @@ useEffect(() => {
       
       <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"> {/* Responsive grid */}
       {products.map((product) => (
-        <li key={product.title}> {/* Use a unique key for each item */}
+        <li key={product.id}> {/* Use a unique key for each item */}
           <ProductCard
-           key={product.id}
+        
            id={product.id}
            title={product.title}
            description={product.description}

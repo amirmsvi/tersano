@@ -12,7 +12,8 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/products', {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://tersano-backend.vercel.app';
+      const response = await axios.post(`${backendUrl}/products`, {
         title,
         description,
         price: parseFloat(price), // Convert price to a number

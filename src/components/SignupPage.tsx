@@ -15,7 +15,8 @@ const SignupPage: React.FC = () => {
   
     try {
       // Correctly named the fields to match backend expectations
-      const response = await axios.post('/signup', {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://tersano-backend.vercel.app';
+      const response = await axios.post(`${backendUrl}/signup`, {
         firstName,
         lastName,
         username: email, // Changed this to 'username'

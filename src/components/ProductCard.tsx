@@ -14,7 +14,8 @@ interface ProductCardProps {
 function ProductCard({ id, title, description, price, image , onDelete}: ProductCardProps) {
     const handleDelete = async () => {
         try {
-          const response = await axios.delete(`/products/${id}`); // Delete request
+          const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://tersano-backend.vercel.app';
+          const response = await axios.delete(`${backendUrl}/products/${id}`); // Delete request
           if (response.status === 200) {
             onDelete(id); // Notify parent component to remove this product
           }
@@ -26,7 +27,7 @@ function ProductCard({ id, title, description, price, image , onDelete}: Product
     <NavLink to="#" className="group block overflow-hidden">
     <img
       src={image}
-      alt=""
+      alt={`Img of ${title}`}
       className="h-[250px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[350px]"
     />
 
