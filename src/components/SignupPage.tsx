@@ -27,8 +27,14 @@ const SignupPage: React.FC = () => {
         navigate('/login'); // Redirect to login
       }
     } catch (error) {
+      if ((error as any).response && (error as any).response.status === 400) {
+        setErrorMessage('This email is already in use.');
+      } else {
+        setErrorMessage('Signup failed. Please try again later.');
+      }
+      
       console.error('Signup failed:', error);
-      setErrorMessage('Signup failed. Please try again.');
+      //setErrorMessage('Signup failed. Please try again.');
     }
   };
   
