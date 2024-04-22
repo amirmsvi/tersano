@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid'); // For generating unique IDs
 
 const app = express();
 app.use(express.json());
@@ -89,6 +90,73 @@ app.post('/login', async (req, res) => {
 app.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: 'Access granted', user: req.user });
 });
+
+// Product interface
+interface Product {
+  id: string; // Unique identifier for each product
+  title: string;
+  description: string;
+  price: number;
+  image: string;
+}
+
+// Dummy product data
+let products: Product[] = [
+  {
+    id: uuidv4(), // Generate a unique ID
+    title: 'Product 1',
+    description: 'Description for Product 1',
+    price: 9.99,
+    image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80', // Placeholder image URL
+  },
+  {
+    id: uuidv4(),
+    title: 'Product 2',
+    description: 'Description for Product 2',
+    price: 14.99,
+    image: 'https://images.unsplash.com/photo-1523381140794-a1eef18a37c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MjQ2fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60',
+  },
+];
+
+// GET endpoint to return product list
+app.get('/products', (req, res) => {
+  res.json(products); // Return product list
+});
+
+// POST endpoint to add new products
+app.post('/products', (req, res) => {
+  const { title, description, price, image } = req.body;
+
+  if (!title || !description || !price || !image) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  const newProduct: Product = {
+    id: uuidv4(), // Generate a unique ID for the new product
+    title,
+    description,
+    price,
+    image,
+  };
+
+  products.push(newProduct); // Add the new product to the list
+  res.status(201).json({ message: 'Product added successfully', product: newProduct });
+});
+
+// DELETE endpoint to remove products by ID
+app.delete('/products/:id', (req, res) => {
+  const { id } = req.params;
+
+  const initialLength = products.length;
+  products = products.filter((product) => product.id !== id); // Remove product with matching ID
+
+  if (products.length === initialLength) {
+    return res.status(404).json({ error: 'Product not found' }); // If no product was removed
+  }
+
+  res.json({ message: 'Product deleted successfully' }); // Confirm deletion
+});
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
