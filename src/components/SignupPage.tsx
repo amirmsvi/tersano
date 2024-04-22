@@ -14,7 +14,7 @@ const SignupPage: React.FC = () => {
     event.preventDefault(); // Prevent form from refreshing the page
   
     try {
-      // Correctly name the field to match backend expectations
+      // Correctly named the fields to match backend expectations
       const response = await axios.post('/signup', {
         firstName,
         lastName,
@@ -77,7 +77,7 @@ const SignupPage: React.FC = () => {
           <div>
             <label htmlFor="email" className="sr-only">Email address</label>
             <input
-              id="email"
+              id="username"
               type="email"
               required
               className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
