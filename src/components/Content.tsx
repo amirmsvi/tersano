@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import ProductCard from './ProductCard';
+import AddProduct from './AddProduct';
 
 
 interface Product {
+    id: string;
     title: string;
     description: string;
     price: string;
@@ -16,6 +18,14 @@ function Content() {
 const [products, setProducts] = useState<Product[]>([]);
 const [loading, setLoading] = useState(true); // State for loading status
 const [error, setError] = useState(''); // State for error messages
+
+const handleProductAdded = (newProduct: Product) => {
+    setProducts([...products, newProduct]); // Add new product to the list
+  };
+
+  const handleProductDeleted = (productId: string) => {
+    setProducts(products.filter((product) => product.id !== productId)); // Remove product by ID
+  }; 
 
 useEffect(() => {
     const fetchProducts = async () => {
@@ -53,17 +63,24 @@ useEffect(() => {
         </p>
       </header>
   
+      
       <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"> {/* Responsive grid */}
       {products.map((product) => (
         <li key={product.title}> {/* Use a unique key for each item */}
           <ProductCard
-            title={product.title}
-            description={product.description}
-            price={product.price}
-            image={product.image}
+           key={product.id}
+           id={product.id}
+           title={product.title}
+           description={product.description}
+           price={product.price}
+           image={product.image}
+           onDelete={handleProductDeleted} // Pass delete callback
           />
         </li>
       ))}
+      <li>
+      <AddProduct onProductAdded={handleProductAdded} />
+      </li>
     </ul>
     </div>
   </section>

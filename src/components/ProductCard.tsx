@@ -1,14 +1,27 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 interface ProductCardProps {
+    id: string;
     title: string;
     description: string;
     price: string;
     image: string;
+    onDelete: (id: string) => void; // Callback function to delete a product
     }
 
-function ProductCard({ title, description, price, image }: ProductCardProps) {
+function ProductCard({ id, title, description, price, image , onDelete}: ProductCardProps) {
+    const handleDelete = async () => {
+        try {
+          const response = await axios.delete(`/products/${id}`); // Delete request
+          if (response.status === 200) {
+            onDelete(id); // Notify parent component to remove this product
+          }
+        } catch (error) {
+          console.error('Error deleting product:', error);
+        }
+      };
   return (
     <NavLink to="#" className="group block overflow-hidden">
     <img
@@ -27,6 +40,7 @@ function ProductCard({ title, description, price, image }: ProductCardProps) {
 
         <span className="tracking-wider text-gray-900 text-s"> $ {price} </span>
       </p>
+      <button onClick={handleDelete} className="text-red-500">Delete</button>
     </div>
   </NavLink>
   )
