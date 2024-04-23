@@ -1,46 +1,78 @@
-# Getting Started with Create React App
+# Product Management Interface with Authentication
+This project is a full-stack application for product management with user authentication. It includes a React frontend, an Express backend, and a set of APIs for user authentication and product management.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Technology Stack](#technology-stack)
+- [Project Setup](#project-setup)
+- [Running the Application](#running-the-application)
+- [Backend Deployment on Vercel](#backend-deployment-on-vercel)
+- [Frontend Deployment on Vercel](#frontend-deployment-on-vercel)
+- [Usage Instructions](#usage-instructions)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Available Scripts
+## Project Overview
+The application allows users to sign up, log in, and manage a collection of products. It includes a dashboard for viewing and managing products, with a protected route requiring user authentication.
 
-In the project directory, you can run:
+## Technology Stack
+- **Frontend**: React, TypeScript, Tailwind CSS
+- **Backend**: Express, TypeScript
+- **Deployment**: Vercel
 
-### `npm start`
+## Project Setup
+To set up the project locally, you'll need the following:
+- [Node.js](https://nodejs.org/) (version 16 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Vercel CLI](https://vercel.com/download) (optional, for deploying to Vercel)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Clone the Repository
+git clone https://github.com/your-username/product-management-app.git
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Install Dependencies
+cd tersano
+npm install
 
-### `npm test`
+## Running the Application
+To run the application locally, start the backend and frontend:
+Start the Backend
+Ensure the backend's CORS settings allow requests from http://localhost:3000.
+Start the backend server: 
+npx tsc index.ts
+node index.js
+The backend should now be running on http://localhost:3001 (or the specified port).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Start the Frontend
+Start the frontend development server:
+cd tersano
+npm start
+The frontend should now be running on http://localhost:3000.
 
-### `npm run build`
+## Backend Deployment on Vercel
+To deploy the backend to Vercel:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Ensure the backend's CORS configuration allows requests from the Vercel-deployed frontend.
+2. Deploy using Vercel CLI or through the Vercel dashboard.
+3. Verify that the backend is accessible at the Vercel-deployed URL.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Frontend Deployment on Vercel
+To deploy the frontend to Vercel:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Ensure the frontend is configured to communicate with the deployed backend.
+2. Deploy using Vercel CLI or through the Vercel dashboard.
+3. Verify that the frontend is accessible and communicates with the backend without CORS issues.
 
-### `npm run eject`
+## Usage Instructions
+- **Sign Up**: Users can sign up using the `/signup` endpoint on the frontend.
+- **Log In**: Upon successful sign-up, users can log in with the `/login` endpoint.
+- **Product Management**: Authenticated users can access the dashboard to view and manage products.
+- **Protected Routes**: Ensure routes that require authentication are protected.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Known Issues
+List any known issues or bugs, along with solutions if available.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Contributing
+This project is not open for contributions.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
+This project is not licensed.
