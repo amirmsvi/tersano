@@ -27,25 +27,31 @@ To set up the project locally, you'll need the following:
 - [Vercel CLI](https://vercel.com/download) (optional, for deploying to Vercel)
 
 ### Clone the Repository
-git clone https://github.com/your-username/product-management-app.git
+git clone https://github.com/amirmsvi/tersano
 
 ### Install Dependencies
+```bash
 cd tersano
 npm install
+```
 
 ## Running the Application
 To run the application locally, start the backend and frontend:
-Start the Backend
+### Start the Backend.
 Ensure the backend's CORS settings allow requests from http://localhost:3000.
-Start the backend server: 
+### Start the backend server: 
+```bash
 npx tsc index.ts
 node index.js
+```
 The backend should now be running on http://localhost:3001 (or the specified port).
 
-Start the Frontend
+### Start the Frontend
 Start the frontend development server:
+```bash
 cd tersano
 npm start
+```
 The frontend should now be running on http://localhost:3000.
 
 ## Backend Deployment on Vercel
@@ -67,9 +73,6 @@ To deploy the frontend to Vercel:
 - **Log In**: Upon successful sign-up, users can log in with the `/login` endpoint.
 - **Product Management**: Authenticated users can access the dashboard to view and manage products.
 - **Protected Routes**: Ensure routes that require authentication are protected.
-
-## Known Issues
-List any known issues or bugs, along with solutions if available.
 
 ## Contributing
 This project is not open for contributions.
